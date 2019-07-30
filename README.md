@@ -5,9 +5,9 @@ to verify you are not robot
 To play around with coding, and to practise with my javascript coding skill. My friend Hayden, inspired me to do this.
 
 ## Screenshots
+![Screenshot](Screenshot.png)
 
-
-## Tech/framework used
+## Tech/framework/language used
 HTML, Javascript , CSS
 
 ## Credits
