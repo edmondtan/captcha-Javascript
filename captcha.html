@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Captcha</title>
+<style>
+#myCanvas{
+    background-image: -moz-linear-gradient(45deg, #666 25%, transparent 25%), 
+        -moz-linear-gradient(-45deg, #666 25%, transparent 25%), 
+        -moz-linear-gradient(45deg, transparent 75%, #666 75%), 
+        -moz-linear-gradient(-45deg, transparent 75%, #666 75%);
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #666), color-stop(.25, transparent)), 
+        -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #666), color-stop(.25, transparent)), 
+        -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #666)), 
+        -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #666));
+    background-image: -webkit-linear-gradient(45deg, #666 25%, transparent 25%), 
+        -webkit-linear-gradient(-45deg, #666 25%, transparent 25%), 
+        -webkit-linear-gradient(45deg, transparent 75%, #666 75%), 
+        -webkit-linear-gradient(-45deg, transparent 75%, #666 75%);
+    background-image: -o-linear-gradient(45deg, #666 25%, transparent 25%), 
+        -o-linear-gradient(-45deg, #666 25%, transparent 25%), 
+        -o-linear-gradient(45deg, transparent 75%, #666 75%), 
+        -o-linear-gradient(-45deg, transparent 75%, #666 75%);
+    background-image: linear-gradient(45deg, #666 25%, transparent 25%), 
+        linear-gradient(-45deg, #666 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #666 75%), 
+        linear-gradient(-45deg, transparent 75%, #666 75%);
+    -moz-background-size: 2px 2px;
+    background-size: 2px 2px;
+    -webkit-background-size: 2px 2.1px; /* override value for webkit */
+    background-position: 0 0, 1px 0, 1px -1px, 0px 1px;
+}
+canvas{
+    pointer-events: none;
+}
+form[onsubmit="validateCaptcha()"]{
+    background: #edf0f5;
+    margin: 0 auto;
+    width: 300px;
+    text-align: center;
+    padding: 0 5px 5px 5px;
+}
+#caption{
+    text-align: left;
+    background: #f0f2f5;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+</style>
+</head>
+<body>
+    <form onsubmit="validateCaptcha()">
+        <div id="caption">Prove you're not a robot</div>
+        <div id="captcha">
+            <canvas id="myCanvas" width="120" height="50" style="border:1px solid black;"></canvas>
+        </div>
+        <input type="text" id="cpatchaTextBox" size="4"/>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', createCaptcha);
+        var code;
+        function createCaptcha() {        
+        const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@$&";
+        const lengthOtp = 6;
+        const captcha = [];
+        for (let i = 0; i < lengthOtp; i++) {
+            const index = Math.floor(Math.random() * chars.length);
+            captcha.push(chars[index]);
+        }
+
+        const canv = document.querySelector("#myCanvas");
+        const ctx = canv.getContext("2d");
+        //firstly,clears the specified pixels within a given rectangle
+        ctx.clearRect(0, 0, canv.width, canv.height);
+        ctx.font = "25px Georgia";
+        ctx.textAlign = "center";
+        let b= Math.floor(Math.random()*19)/100;
+        b *= Math.floor(Math.random()*2) == 1 ? 1 : -1; //this will turn number to positive or negetive in 50% chance
+        let c =Math.floor(Math.random()*19)/100;
+        c *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
+        ctx.transform(1,b,c,1,0,0);
+        ctx.strokeText(captcha.join(""), canv.width/2, 30);
+        //storing captcha so that can validate you can save it somewhere else according to your specific requirements
+        code = captcha.join("");
+        }
+
+        function validateCaptcha() {
+        event.preventDefault();
+        if (document.getElementById("cpatchaTextBox").value == code) {
+            alert("Valid Captcha. You are human.")
+        }else{
+            alert("Invalid Captcha. Try again");
+            createCaptcha();
+        }
+        }
+    </script>
+</body>
+</html>
